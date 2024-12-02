@@ -1,5 +1,6 @@
 from typing import List, Tuple
 from collections import Counter
+import math
 
 
 class StatItem:
@@ -47,6 +48,9 @@ class Dataset:
     def __init__(self, data: List[float]) -> None:
         self.data = data
 
+    def size(self) -> int:
+        return len(self.data)
+
     # вариационный ряд
     def var_series(self) -> List[float]:
         return sorted(self.data)
@@ -91,3 +95,11 @@ class Dataset:
     # эмпирическая функция распределения
     def cdf(self) -> EmpiricFunction:
         return EmpiricFunction(self.stat_series())
+
+    # величина интервала статистического ряда (формула Стерджеса)
+    def get_h(self) -> float:
+        return self.width() / (1 + math.log2(self.size()))
+
+    # число интервалов (формула Стерджеса)
+    def get_m(self) -> int:
+        return math.ceil(1 + math.log2(self.size()))

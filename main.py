@@ -1,3 +1,4 @@
+from chart import Chart
 from dataset import Dataset
 
 from logger import Logger, LogLevel
@@ -40,11 +41,32 @@ def main() -> None:
     print("2.1 Оценка дисперсии: ", dataset.variance())
     print("2.1.1 Исправленная дисперсия: ", dataset.corrected_variance())
     print("2.2 Среднее квадратичное отклонение: ", dataset.std())
-    print("2.2.1 Исправленное среднее квадратичное отклонение: ", dataset.corrected_std())
+    print(
+        "2.2.1 Исправленное среднее квадратичное отклонение: ", dataset.corrected_std()
+    )
 
     # 3. эмпирическая функция распределения
-    print('3. Эмпирическая функция распределения:')
+    print("3. Эмпирическая функция распределения:")
     print(dataset.cdf().to_string())
+
+    # 4. Графики
+    images_dir_path = "images"
+    chart = Chart(images_dir_path)
+
+    empiric_function_file_path = "empiric_function.png"
+    chart.cdf(dataset.cdf(), empiric_function_file_path)
+    print(
+        f"4.1 График эмпирической функции сохранен в {images_dir_path}/{empiric_function_file_path}"
+    )
+
+    histogram_file_path = "histogram.png"
+    chart.histogram(dataset, histogram_file_path)
+    print(f"4.2 Гистограмма сохранена в {images_dir_path}/{histogram_file_path}")
+
+    count_polygon_file_path = "count_polygon.png"
+    chart.count_polygon(dataset, count_polygon_file_path)
+    print(f"4.3 Полигон частот сохранен в {images_dir_path}/{count_polygon_file_path}")
+
 
 if __name__ == "__main__":
     main()
