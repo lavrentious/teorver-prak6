@@ -41,6 +41,18 @@ class EmpiricFunction:
         return ans
 
 
+class Interval:
+    # [start, end)
+    start: float
+    end: float
+    items: List[StatItem]
+
+    def __init__(self, start: float, end: float, items: List[StatItem]) -> None:
+        self.start = start
+        self.end = end
+        self.items = items
+
+
 class Dataset:
 
     data: List[float]
@@ -103,3 +115,22 @@ class Dataset:
     # число интервалов (формула Стерджеса)
     def get_m(self) -> int:
         return math.ceil(1 + math.log2(self.size()))
+
+    # группировка выборки по интервалам
+    def group(self) -> List[Interval]:
+        ans: List[Interval] = []
+
+        stat_series = self.stat_series()
+        h = self.get_h()  # ширина интервала
+        m = self.get_m()  # количество интервалов
+
+        x_start = stat_series[0].stat - (h / 2)
+        for _ in range(m):
+            interval = Interval(x_start, x_start + h, [])
+            for stat in stat_series:
+                if x_start <= stat.stat < x_start + h:
+                    interval.items.append(stat)
+            ans.append(interval)
+            x_start += h
+
+        return ans

@@ -33,20 +33,13 @@ class Chart:
     def histogram(self, dataset: Dataset, file_path: str) -> None:
         fig, ax = plt.subplots()
 
-        stat_series = dataset.stat_series()
-        h = dataset.get_h()  # ширина интервала
-        m = dataset.get_m()  # количество интервалов
-
-        x_start = stat_series[0].stat - (h / 2)
-        for _ in range(m):
-            cnt = 0  # количество статистик в интервале
-            for stat in dataset.stat_series():
-                if x_start <= stat.stat < x_start + h:
-                    cnt += stat.count
-            label = f"{round(x_start, 3)} : {round(x_start + h, 3)}"
-            ax.bar(x_start, cnt / dataset.size(), width=h, label=label)
-            # ax.fill_between((x_start, x_start + h), (value, value), label=label)
-            x_start += h
+        intervals = dataset.group()
+        for interval in intervals:
+            label = f"{round(interval.start, 3)} : {round(interval.end, 3)}"
+            count = sum(map(lambda s: s.count, interval.items))
+            value = count / dataset.size()
+            width = interval.end - interval.start
+            ax.bar(interval.start, value, width=width, label=label)
 
         ax.legend(loc="upper left", bbox_to_anchor=(1.05, 1.0))
         ax.set_title("Гистограмма")
@@ -58,23 +51,12 @@ class Chart:
     def count_polygon(self, dataset: Dataset, file_path: str) -> None:
         fig, ax = plt.subplots()
 
-        stat_series = dataset.stat_series()
-        h = dataset.get_h()  # ширина интервала
-        m = dataset.get_m()  # количество интервалов
-
-        x_start = stat_series[0].stat - (h / 2)
+        intervals = dataset.group()
         xs: List[float] = []
         ys: List[int] = []
-        for _ in range(m):
-            cnt = 0  # количество статистик в интервале
-            for stat in dataset.stat_series():
-                if x_start <= stat.stat < x_start + h:
-                    cnt += stat.count
-            # ax.plot(x_start + h / 2, cnt / dataset.size(), marker="o")
-            xs.append(x_start + h / 2)
-            ys.append(cnt)
-
-            x_start += h
+        for interval in intervals:
+            xs.append((interval.end + interval.start) / 2)
+            ys.append(sum(map(lambda s: s.count, interval.items)))
 
         ax.plot(xs, ys, marker="o")
 
