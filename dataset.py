@@ -30,21 +30,24 @@ class EmpiricFunction:
 
     def to_string(self) -> str:
         ans = ""
-        for interval_start, interval_end, f in self.items:
-            left_sign = "<"
-            right_sign = "<" if interval_end == float("inf") else "<="
-
-            l = "-∞" if interval_start == -float("inf") else str(interval_start)
-            r = "∞" if interval_end == float("inf") else str(interval_end)
-
-            # ans += f"{l}\t{left_sign}\tx\t{right_sign}\t{r}\t:\t{round(f, 3)}\n"
-            if interval_start == -float("inf"):
-                ans += f'{round(f,3)},\tесли\t\t\t\tx\t{right_sign}\t{r}\n'
-            elif interval_end == float("inf"):
-                ans += f'{round(f,3)},\tесли\t\t{l}\t{left_sign}\tx\n'
-            else:
-                ans += f'{round(f,3)},\tесли\t\t{l}\t{left_sign}\tx\t{right_sign}\t{r}\n'
+        for item in self.items:
+            ans += self.get_label(item)
         return ans
+
+    def get_label(self, item: Tuple[float, float, float]) -> str:
+        interval_start, interval_end, f = item
+        left_sign = "<"
+        right_sign = "<" if interval_end == float("inf") else "<="
+
+        l = "-∞" if interval_start == -float("inf") else str(interval_start)
+        r = "∞" if interval_end == float("inf") else str(interval_end)
+
+        # ans += f"{l}\t{left_sign}\tx\t{right_sign}\t{r}\t:\t{round(f, 3)}\n"
+        if interval_start == -float("inf"):
+            return f"{round(f,3)},\tесли\t\t\t\tx\t{right_sign}\t{r}\n"
+        elif interval_end == float("inf"):
+            return f"{round(f,3)},\tесли\t\t{l}\t{left_sign}\tx\n"
+        return f"{round(f,3)},\tесли\t\t{l}\t{left_sign}\tx\t{right_sign}\t{r}\n"
 
 
 class Interval:
@@ -57,7 +60,7 @@ class Interval:
         self.start = start
         self.end = end
         self.items = items
-        
+
     def to_string(self) -> str:
         return f"[{self.start}, {self.end})\t:\t{len(self.items)}"
 

@@ -19,14 +19,13 @@ class Chart:
         fig, ax = plt.subplots()
 
         for start, end, f in empiric_function.items:
-            ax.hlines(y=f, xmin=start, xmax=end, label=f"{start} < x <= {end:.2f}")
+            ax.hlines(y=f, xmin=start, xmax=end)
 
         ax.set_title("Эмпирическая функция")
         ax.set_xlabel("x")
         ax.set_ylabel("F(x)")
         ax.set_yticks([i / 20.0 for i in range(0, 21)])
 
-        ax.legend(loc="center left", bbox_to_anchor=(1, 0.5), fontsize="small")
         plt.tight_layout()
         plt.savefig(self._joined_path(file_path))
 
