@@ -26,6 +26,8 @@ def main() -> None:
     print("1.1 первая порядковая статистика: ", dataset.var_series()[0])
     print("1.1 n-ая порядковая статистика: ", dataset.var_series()[-1])
     print("1.2 размах: ", dataset.width())
+    print("1.3 мода: ", dataset.mode())
+    print("1.4 медиана: ", dataset.median())
 
     # 2. статистический ряд
     print("2. Статистический ряд: ")

@@ -71,6 +71,14 @@ class Dataset:
     def width(self) -> float:
         return self.var_series()[-1] - self.var_series()[0]
 
+    # мода (самая частая)
+    def mode(self) -> float:
+        return max(self.stat_series(), key=lambda x: x.count).stat
+
+    # медиана
+    def median(self) -> float:
+        return self.var_series()[len(self.var_series()) // 2]
+
     # статистический ряд
     # статистика: количество вхождений
     def stat_series(self) -> List[StatItem]:
