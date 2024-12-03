@@ -87,10 +87,7 @@ class Dataset:
 
     # выборочное среднее (матемтаическое ожидание)
     def mean(self) -> float:
-        ans: float = 0.0
-        for stat in self.stat_series():
-            ans += stat.stat * stat.count
-        return ans / len(self.data)
+        return sum(self.data) / len(self.data)
 
     # выборочная дисперсия
     def variance(self) -> float:
