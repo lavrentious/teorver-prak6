@@ -34,10 +34,11 @@ class Chart:
         fig, ax = plt.subplots()
 
         intervals = dataset.group()
+        h = dataset.get_h()
         for interval in intervals:
             label = f"{round(interval.start, 3)} : {round(interval.end, 3)}"
             count = sum(map(lambda s: s.count, interval.items))
-            value = count / dataset.size()
+            value = count / h
             width = interval.end - interval.start
             ax.bar(interval.start, value, width=width, label=label)
 
